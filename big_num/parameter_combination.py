@@ -14,7 +14,7 @@ def make_filter(filter_array):
     """
     if filter_array != []:
         var_id, var_name, var_type, filter_op, filter_values = filter_array[0], filter_array[1], filter_array[2], \
-                                                               filter_array[3], filter_array[4]
+            filter_array[3], filter_array[4]
         tem_filter = {
             "op": "and",
             "exprs": [
@@ -58,8 +58,6 @@ def ltv_post_report(initial_array, revenue_array, time_range_and_len, target_use
     :param global_filter: 全局过滤
     :return:
     """
-    # initial_event_type, initial_event_key, initial_event_filter = 2, 3, 4
-    # revenue_event_type, revenue_event_key, revenue_event_attributeKey, revenue_event_filter = 5, 6, 7, 8
     for i, pairs in enumerate(
             AllPairs([initial_array, revenue_array, time_range_and_len, target_users, global_filter])):
         body = {
@@ -88,14 +86,78 @@ def ltv_post_report(initial_array, revenue_array, time_range_and_len, target_use
             "filter": pairs[4],
             "editStatus": "true"
         }
-        print(json.dumps(body, ensure_ascii=False))
-        with open("ltv_body.csv", "a", encoding="utf-8") as f:
+        print("查询LTV分析数据%s" % json.dumps(body, ensure_ascii=False))
+        with open("ltv_report.csv", "a", encoding="utf-8") as f:
             write = csv.writer(f)
             write.writerow(["数据集-%s" % str(i + 1), json.dumps(body, ensure_ascii=False), pairs[2][1]])
 
 
-def ltv_post_create():
-    pass
+def ltv_post_create(initial_array, revenue_array, time_range_and_len, target_users, global_filter):
+    """
+
+    :param initial_array: 0: 事件类型， 1：事件标识符
+    :param revenue_array: 0：事件类型， 1：事件标识符， 2：度量
+    :param time_range_and_len: 0：时间范围， 1：对应时间的断言
+    :param target_users:： 目标用户
+    :param global_filter: 全局过滤
+    :return:
+    """
+    for i, pairs in enumerate(
+            AllPairs([initial_array, revenue_array, time_range_and_len, target_users, global_filter])):
+        create_body = {
+            "name": "新建LTV分析" + str(i),
+            "initialEvent": {
+                "type": pairs[0][0][0],
+                "key": pairs[0][0][1],
+                "filter": pairs[0][1]
+            },
+            "revenueEvents": [
+                {
+                    "metric": {
+                        "alias": "访问退出的分析组全局虚拟属性-float",
+                        "key": pairs[1][0][1],
+                        "type": pairs[1][0][0],
+                        "filter": pairs[1][1],
+                        "attributeKey": pairs[1][0][2]
+                    }
+                }
+            ],
+            "timeRange": pairs[2][0],
+            "targetUser": {
+                "key": pairs[3]
+            },
+            "filter": pairs[4],
+            "chartType": "LTV"
+        }
+        print("创建LTV分析单图%s" % json.dumps(create_body, ensure_ascii=False))
+
+        updata_body = {
+            "name": "更新LTV分析" + str(i),
+            "initialEvent": {
+                "type": "custom",
+                "key": "$anyevent"
+            },
+            "revenueEvents": [
+                {
+                    "metric": {
+                        "alias": "访问的页面浏览数目",
+                        "id": "rRGoYQml",
+                        "key": "$visit",
+                        "type": "custom",
+                        "attributeKey": "$page_count"
+                    }
+                }
+            ],
+            "timeRange": "day:91,1",
+            "targetUser": {
+                "key": "uv"
+            }
+        }
+        with open("ltv_create.csv", "a", encoding="utf-8") as f:
+            write = csv.writer(f)
+            write.writerow(
+                ["数据集-%s" % str(i + 1), json.dumps(create_body, ensure_ascii=False),
+                 json.dumps(updata_body, ensure_ascii=False), "新建LTV分析" + str(i)])
 
 
 def ltv_put_update():
@@ -139,8 +201,15 @@ if __name__ == '__main__':
 
     # LTV分析-查询数据
     time_range_and_len = [[i, i.split(",")[0].replace("day:", "")] for i in time_range]
-    with open("ltv_body.csv", "w", encoding="utf-8") as f:
+    with open("ltv_report.csv", "w", encoding="utf-8") as f:
         write = csv.writer(f)
         write.writerow(["数据集名称", "ltv_query_body", "assert_data_len"])
     ltv_post_report(re_pairs([initial_array, filter_list]), re_pairs([revenue_array, filter_list]), time_range_and_len,
+                    target_users, filter_list)
+
+    # LTV分析-创建更新单图
+    with open("ltv_create.csv", "w", encoding="utf-8") as f:
+        write = csv.writer(f)
+        write.writerow(["数据集名称", "ltv_create_body", "ltv_update_body", "assert_ltv_name"])
+    ltv_post_create(re_pairs([initial_array, filter_list]), re_pairs([revenue_array, filter_list]), time_range_and_len,
                     target_users, filter_list)
