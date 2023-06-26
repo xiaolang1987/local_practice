@@ -3,6 +3,6 @@
 # author@zhaopeng
 # @time: 2023/6/9 09:52
 
-import tools
+import utils
 
-tools.down_file("a", "a")
+utils.down_file("a", "a")
