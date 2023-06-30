@@ -14,13 +14,14 @@ def down_file(down_url, file_name):
     print("下载链接：%s" % down_url)
     print("下载地址：%s" % file_name)
     response = requests.request("GET", down_url)
+    # print("文件大小：%s M" % str((len(response.content)/1024/1024)[:4]))
     with open(file_name, "wb") as f:
         f.write(response.content)
 
 
 for page_num in range(62):
-    url_get_audio_id = "https://www.kugou.com/ts/album/16kzygab/p%s.html" % (page_num + 2)
-    print("下载页%s" % (page_num + 2))
+    url_get_audio_id = "https://www.kugou.com/ts/album/16kzygab/p%s.html" % (page_num + 62)
+    print("下载页%s" % (page_num + 62))
     headers_get_audio_id = {
         'authority': 'www.kugou.com',
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
