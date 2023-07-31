@@ -7,6 +7,7 @@ import requests
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
 import random
+import subprocess
 import time
 
 # 禁用安全请求警告
@@ -16,11 +17,19 @@ disable_warnings(InsecureRequestWarning)
 class req:
     ot = 10
     verify = False
+    agent_list = [
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.58",
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Safari/605.1.15",
+        "Dalvik/2.1.0 (Linux; U; Android 5.1.1; vivo X9 Build/LMY49M)",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.67"
+    ]
 
     def __init__(self, url, params=None, header=None, payload=None, files=None, cookie=None):
         self.url = url
         self.params = params if params else {}
-        self.header = header if header else {"Connection": "close"}
+        self.header = header if header else {}
+        self.header["User-Agent"] = random.choice(req.agent_list)
         self.payload = payload if payload else {}
         self.files = files if files else {}
         self.cookie = cookie if cookie else {}
@@ -44,6 +53,20 @@ class req:
             print("\n异常信息：接口调用失败！ url 【%s】 data 【%s】 实际结果是 【%s】" % (self.url, self.params, res))
 
         return res
+
+
+def youGet():
+    """
+    you-get -i 下载链接
+    you-get -o download-path --format=格式 下载链接
+    todo
+    如何精准解析文本内容？？？
+    """
+    a = subprocess.Popen("you-get -json https://www.bilibili.com/video/BV15h4y1V7vW", shell=True,
+                         stdout=subprocess.PIPE)
+    a.wait()
+    print(a.stdout.readline().decode("utf-8"))
+    pass
 
 
 def down_file(down_url, file_name):
