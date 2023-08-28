@@ -1,8 +1,15 @@
 bili:
   林霖心医:
     up_id: "1482025194"
+    path:
+      - /Users/zhaopeng/work/02-scr/
     downloaded_list:
-      - jljkljl
+      - a
+      - b
+      - c
+      - d
     black_list:
-      - jjj
+      - h
+      - i
+      - j
 

@@ -4,10 +4,12 @@
 # @time: 2023/7/27 23:37
 
 from utils import req
+import yaml
+
 
 class bili_station:
 
-    def __int__(self):
+    def __init__(self):
         pass
 
     def get_av_list(self):
@@ -18,8 +20,10 @@ class bili_station:
         视频id    $.data.list.vlist[*].bvid
         视频标题    $.data.list.vlist[*].title
         上传时间    $.data.list.vlist[1].created
-        合计  $.data.list.vlist[1].meta.title
+        合集  $.data.list.vlist[1].meta.title
         """
+        av_list = []
+
         for i in range(60):
             get_av_list_url = "https://api.bilibili.com/x/space/wbi/arc/search?mid=6011141&ps=30&tid=0&pn=1"
             get_av_list_payload = {}
@@ -48,7 +52,20 @@ class bili_station:
                     bvid = vinfo["bvid"]
                     title = vinfo["title"]
                     created = vinfo["created"]
-                    print([bvid, title, created])
+                    albums = vinfo["meta"]["title"]
+                    print([bvid, title, created, albums])
+                    av_list.append([bvid, title, created, albums])
+        return av_list
+
+    def dif_need_download(self):
+        net_list = ["a", "e", "f", "g", "i"]
+
+        with open("download_info.yml", "r", encoding="utf-8") as f:
+            con = yaml.load(f, Loader=yaml.FullLoader)
+        a = con["bili"]["林霖心医"]
+        need_down = set(net_list).difference(set(a["black_list"])).difference(set(a["downloaded_list"]))
+
+        return need_down
 
 
 if __name__ == '__main__':
@@ -56,4 +73,4 @@ if __name__ == '__main__':
     # up主、id、存储目录的对应文件
     # 视频与下载状态的对应文件
     bili = bili_station()
-    bili.get_av_list()
+    print(bili.dif_need_download())
