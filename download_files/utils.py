@@ -60,8 +60,8 @@ class req:
         try:
             res = requests.get(self.url, params=self.params, headers=self.header, data=self.payload,
                                cookies=self.cookie, verify=req.verify, timeout=req.ot)
-            # with open(os.path.join(folder_path, file_name), "wb") as f:
-            #     f.write(res.content)
+            with open(os.path.join(folder_path, file_name), "wb") as f:
+                f.write(res.content)
             print(os.path.join(folder_path, file_name))
         except Exception as e:
             res = {"error": str(e)}  # 如果接口调用出错的话，那么就返回一个有错误信息的字典
