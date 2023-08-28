@@ -8,7 +8,7 @@ from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
 import random
 import subprocess
-import time
+import os
 
 # 禁用安全请求警告
 disable_warnings(InsecureRequestWarning)
@@ -55,6 +55,17 @@ class req:
             print("\n异常信息：接口调用失败！ url 【%s】 data 【%s】 实际结果是 【%s】" % (self.url, self.params, res))
 
         return res
+
+    def download_get(self, folder_path, file_name):
+        try:
+            res = requests.get(self.url, params=self.params, headers=self.header, data=self.payload,
+                               cookies=self.cookie, verify=req.verify, timeout=req.ot)
+            # with open(os.path.join(folder_path, file_name), "wb") as f:
+            #     f.write(res.content)
+            print(os.path.join(folder_path, file_name))
+        except Exception as e:
+            res = {"error": str(e)}  # 如果接口调用出错的话，那么就返回一个有错误信息的字典
+            print("异常信息：接口调用失败！ url 【%s】 data 【%s】 实际结果是 【%s】" % (self.url, self.params, res))
 
 
 def youGet(url, down_format, down_path, delete_video=None):
