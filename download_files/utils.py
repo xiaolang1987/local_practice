@@ -14,7 +14,7 @@ import os
 disable_warnings(InsecureRequestWarning)
 
 
-class req:
+class Req:
     ot = 10
     verify = False
     user_agent_list = [
@@ -68,7 +68,7 @@ class req:
             print("异常信息：接口调用失败！ url 【%s】 data 【%s】 实际结果是 【%s】" % (self.url, self.params, res))
 
 
-def youGet(url, down_format, down_path, delete_video=None):
+def YouGet(url, down_format, down_path, delete_video=None):
     """
     you-get -i 下载链接
     you-get -o download-path --format=格式 下载链接
@@ -97,11 +97,5 @@ def youGet(url, down_format, down_path, delete_video=None):
                 print(line.decode("utf-8").replace("\n", ""))
 
 
-def down_file(down_url, file_name):
-    response = requests.request("GET", down_url)
-    with open(file_name, "wb") as f:
-        f.write(response.content)
-
-
 if __name__ == '__main__':
-    youGet("https://www.bilibili.com/video/BV15h4y1V7vW", "mp3", "/Users/zhaopeng/zp/bilibili/")
+    YouGet("https://www.bilibili.com/video/BV15h4y1V7vW", "mp3", "/Users/zhaopeng/zp/bilibili/")

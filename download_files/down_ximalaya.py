@@ -3,7 +3,7 @@
 # author: zhaopeng
 # @time: 2023/8/31 22:36
 
-from utils import req
+from utils import Req
 from urllib import parse
 
 
@@ -23,7 +23,7 @@ class Downloads:
         page_num = 1
         for i in range(9999):
             get_info_params = {"albumId": album_id, "pageNum": page_num, "pageSize": "30"}
-            r = req(url=parse.urljoin(self.host, path), params=get_info_params)
+            r = Req(url=parse.urljoin(self.host, path), params=get_info_params)
             response = r.get()
             tracks = response.json()["data"]["tracks"]
             if len(tracks) == 0:
@@ -42,13 +42,13 @@ class Downloads:
         """
         path = "/revision/play/v1/audio"
         get_download_url_params = {"id": sound_id, "ptype": "1"}
-        r = req(url=parse.urljoin(self.host, path), params=get_download_url_params)
+        r = Req(url=parse.urljoin(self.host, path), params=get_download_url_params)
         response = r.get()
 
         return response.json()["data"]["src"]
 
     def download(self, floder_path, file_name, url):
-        r = req(url=url)
+        r = Req(url=url)
         r.download_get(floder_path, file_name)
 
 

@@ -3,7 +3,7 @@
 # author: zhaopeng
 # @time: 2023/7/27 23:37
 
-from utils import req
+from utils import Req
 from urllib import parse
 import yaml
 
@@ -42,7 +42,7 @@ class Downloads:
                 'sec-fetch-site': 'same-site',
                 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.67'
             }
-            r = req(url=get_av_list_url, header=get_av_list_headers, payload=get_av_list_payload)
+            r = Req(url=get_av_list_url, header=get_av_list_headers, payload=get_av_list_payload)
             response = r.get()
             vlist = response.json()["data"]["list"]["vlist"]
             if vlist == []:
