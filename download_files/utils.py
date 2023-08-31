@@ -9,6 +9,7 @@ from urllib3 import disable_warnings
 import random
 import subprocess
 import os
+import pandas as pd
 
 # 禁用安全请求警告
 disable_warnings(InsecureRequestWarning)
@@ -31,7 +32,7 @@ class Req:
         self.url = url
         self.params = params if params else {}
         self.header = header if header else {}
-        self.header["User-Agent"] = random.choice(req.user_agent_list)
+        self.header["User-Agent"] = random.choice(Req.user_agent_list)
         self.payload = payload if payload else {}
         self.files = files if files else {}
         self.cookie = cookie if cookie else {}
@@ -39,7 +40,7 @@ class Req:
     def get(self):
         try:
             res = requests.get(self.url, params=self.params, headers=self.header, data=self.payload,
-                               cookies=self.cookie, verify=req.verify, timeout=req.ot)
+                               cookies=self.cookie, verify=Req.verify, timeout=Req.ot)
         except Exception as e:
             res = {"error": str(e)}  # 如果接口调用出错的话，那么就返回一个有错误信息的字典
             print("异常信息：接口调用失败！ url 【%s】 data 【%s】 实际结果是 【%s】" % (self.url, self.params, res))
@@ -49,7 +50,7 @@ class Req:
     def post(self):
         try:
             res = requests.post(self.url, params=self.params, headers=self.header, data=self.payload, files=self.files,
-                                cookies=self.cookie, verify=req.verify, timeout=req.ot)
+                                cookies=self.cookie, verify=Req.verify, timeout=Req.ot)
         except Exception as e:
             res = {"error": str(e)}  # 如果接口调用出错的话，那么就返回一个有错误信息的字典
             print("\n异常信息：接口调用失败！ url 【%s】 data 【%s】 实际结果是 【%s】" % (self.url, self.params, res))
@@ -59,7 +60,7 @@ class Req:
     def download_get(self, folder_path, file_name):
         try:
             res = requests.get(self.url, params=self.params, headers=self.header, data=self.payload,
-                               cookies=self.cookie, verify=req.verify, timeout=req.ot)
+                               cookies=self.cookie, verify=Req.verify, timeout=Req.ot)
             with open(os.path.join(folder_path, file_name), "wb") as f:
                 f.write(res.content)
             print(os.path.join(folder_path, file_name))
@@ -95,6 +96,26 @@ def YouGet(url, down_format, down_path, delete_video=None):
             down_info.wait()
             for line in down_info.stdout.readlines():
                 print(line.decode("utf-8").replace("\n", ""))
+
+
+class RecordDownloadInfo():
+    def __init__(self):
+        pass
+
+    def read_log_file(self):
+        for i in range(5):
+            df = pd.read_csv("download_info.csv")
+
+            print(len(df))
+            print(df.to_string())
+
+            add_dict = {"文件名": "后传", "文件格式": "MP3", "下载网站": "", "下载时间": ""}
+            print(type(add_dict))
+            add_df = pd.DataFrame(add_dict, index=[len(df)])
+            add_df.to_csv("download_info.csv", mode="a", header=False, index=False)
+
+    def write_log_file(self):
+        pass
 
 
 if __name__ == '__main__':
