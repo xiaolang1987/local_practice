@@ -3,9 +3,9 @@
 # author@zhaopeng
 # @time: 2023/6/9 09:52
 
-import draft
+import down_bilibili
 
-bili = draft.bili_station()
+bili = down_bilibili.Downloads()
 bili.get_av_list()
 
 # 对比需要下载的内从
