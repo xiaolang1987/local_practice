@@ -7,7 +7,7 @@ from utils import Req
 from urllib import parse
 
 
-class Downloads:
+class DownloadsXiMaLaYa:
 
     def __init__(self):
         self.host = "https://www.ximalaya.com"
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     # 视频与下载状态的对应文件
     # bili = bili_station()
     # print(bili.dif_need_download())
-    xima = Downloads()
+    xima = DownloadsXiMaLaYa()
     down_info = xima.get_download_info_list("52843738")
     for info in down_info:
         down_url = xima.get_download_url(info[2])

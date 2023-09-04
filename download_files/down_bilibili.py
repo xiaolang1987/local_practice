@@ -8,7 +8,7 @@ from urllib import parse
 import yaml
 
 
-class Downloads:
+class DownloadsBiLi:
 
     def __init__(self):
         pass
@@ -73,5 +73,5 @@ if __name__ == '__main__':
     # 待办
     # up主、id、存储目录的对应文件
     # 视频与下载状态的对应文件
-    bili = Downloads()
+    bili = DownloadsBiLi()
     print(bili.dif_need_download())
