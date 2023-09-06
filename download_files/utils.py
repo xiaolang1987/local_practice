@@ -16,7 +16,7 @@ disable_warnings(InsecureRequestWarning)
 
 
 class Req:
-    ot = 10
+    ot = 60
     verify = False
     user_agent_list = [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36",
@@ -48,6 +48,7 @@ class Req:
         return res
 
     def post(self):
+        print(self.header["User-Agent"])
         try:
             res = requests.post(self.url, params=self.params, headers=self.header, data=self.payload, files=self.files,
                                 cookies=self.cookie, verify=Req.verify, timeout=Req.ot)
