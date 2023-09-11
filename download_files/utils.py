@@ -48,7 +48,6 @@ class Req:
         return res
 
     def post(self):
-        print(self.header["User-Agent"])
         try:
             res = requests.post(self.url, params=self.params, headers=self.header, data=self.payload, files=self.files,
                                 cookies=self.cookie, verify=Req.verify, timeout=Req.ot)
@@ -59,12 +58,13 @@ class Req:
         return res
 
     def download_get(self, folder_path, file_name):
+        print("开始下载：%s" % file_name)
         try:
             res = requests.get(self.url, params=self.params, headers=self.header, data=self.payload,
                                cookies=self.cookie, verify=Req.verify, timeout=Req.ot)
             with open(os.path.join(folder_path, file_name), "wb") as f:
                 f.write(res.content)
-            print(os.path.join(folder_path, file_name))
+            print("下载完成：%s" % os.path.join(folder_path, file_name))
         except Exception as e:
             res = {"error": str(e)}  # 如果接口调用出错的话，那么就返回一个有错误信息的字典
             print("异常信息：接口调用失败！ url 【%s】 data 【%s】 实际结果是 【%s】" % (self.url, self.params, res))
