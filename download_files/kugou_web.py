@@ -20,7 +20,7 @@ def down_file(down_url, file_name):
 
 
 for page_num in range(62):
-    url_get_audio_id = "https://www.kugou.com/ts/album/16kzygab/p%s.html" % (page_num + 62)
+    url_get_audio_id = "https://www.kugou.com/ts/album/157xm6a3/p%s.html" % (page_num + 1)
     print("下载页%s" % (page_num + 62))
     headers_get_audio_id = {
         'authority': 'www.kugou.com',
@@ -45,10 +45,10 @@ for page_num in range(62):
     for i in b.select("body div li span a"):
         album_id = i.get("href").split("/")[-1].split(".")[0]
         album_num = i.contents[0].replace("虚空凝剑行 第", "").replace("集", "").zfill(4)
-        # print(album_num, album_id)
+        print(album_num, album_id)
 
         url_get_url = "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&callback=jQuery18007975900876100417_1687842587753&appid=1014&dfid=1twuST2NT6jC0r1mYJ0wSQMA&mid=0a3df919e29a5222c3a112fd0fcd91b3&platid=4&from=112&encode_album_audio_id=%s" % album_id
-        print(url_get_url[-11:-1])
+        print("video ID：%s" % url_get_url[-11:-1])
 
         # 获取下载链接
         agent_list = [
@@ -75,6 +75,5 @@ for page_num in range(62):
         response_get_url = requests.request("GET", url_get_url, headers=headers, data={})
         print(headers['user-agent'])
         down_url = json.loads(response_get_url.text.split("(")[1].replace(");", ""))["data"]["play_url"]
-
         # 下载并保存
-        down_file(down_url, "/Users/zhaopeng/Personal/bilibili/xukong/虚空凝剑行-%s.mp3" % album_num)
+        down_file(down_url, "/Users/zhaopeng/zp/bilibili/狂飙/%s.mp3" % album_num)

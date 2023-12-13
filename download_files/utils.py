@@ -99,7 +99,7 @@ def YouGet(url, down_format, down_path, delete_video=None):
                 print(line.decode("utf-8").replace("\n", ""))
 
 
-class RecordDownloadInfo():
+class RecordDownloadInfo:
     def __init__(self):
         pass
 
