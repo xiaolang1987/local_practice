@@ -3,21 +3,27 @@
 # author@zhaopeng
 # @time: 2023/12/27 16:54
 
-import requests
 
+def read_all_txt():
+    # 去读所有数据类型的值
+    with open("./list_date.csv", "r") as datef:
+        list_date = datef.readline()
 
-class GetMetaDataInfo():
+    with open("list_float.csv", "r") as floatf:
+        list_float = floatf.readline()
 
-    def get_pre_event(self):
-        path = "/api/backend/track-event/search"
-        params = {"offset": "90", "limint": "10", "keyword": "$"}
-        headers = {"X-Product-Unique-Id": "DC", "X-Project-Id": "46",
-                   "Authorization": "Bearer ce71581a-0bdf-47dc-a825-b23a1ef30117"}
-        response = requests.request("GET", "http://uat-uba.growingio.cn/api/backend/track-event/search", params=params,
-                                    headers=headers)
-        print(response.json())
+    with open("list_int.csv", "r") as intf:
+        list_int = intf.readline()
+
+    with open("list_list.csv", "r") as listf:
+        list_list = listf.readline()
+
+    with open("list_string.csv", "r") as strf:
+        list_string = strf.readlines()
+
+    return {"date": list_date, "list_float": list_float, "list_int": list_int, "list_list": list_list,
+            "list_string": list_string}
 
 
 if __name__ == '__main__':
-    a = GetMetaDataInfo()
-    a.get_pre_event()
+    print(read_all_txt())
