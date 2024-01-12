@@ -12,12 +12,12 @@ def add_mp3_info(audio_file, album, pic_url=None):
     # 打开音频文件
     audio = ID3(audio_file)
     # 通过文件名拆解歌名和歌手
-    name = audio_file.split("/")[-1].split("-")[0].replace(" ", "")
-    singer = audio_file.split("/")[-1].split("-")[1].split(".")[0].replace(" ", "")
+    singer = audio_file.split("/")[-1].split("-")[0].replace(" ", "")
+    name = audio_file.split("/")[-1].split("-")[1].split(".")[0].replace(" ", "")
 
     # 默认直接添加，暂无判断逻辑
-    audio.add(TIT2(encoding=3, text=singer))  # 添加艺术家
-    audio.add(TPE1(encoding=3, text=name))  # 添加歌曲名称
+    audio.add(TPE1(encoding=3, text=singer))  # 添加艺术家
+    audio.add(TIT2(encoding=3, text=name))  # 添加歌曲名称
     audio.add(TALB(encoding=3, text=album))  # 添加专辑名称
     if pic_url:
         success = download_cover(pic_url)
@@ -32,8 +32,8 @@ def add_mp3_info(audio_file, album, pic_url=None):
         else:
             print("封面下载失败，未替换封面")
     audio.save(v2_version=3)
-    print("艺术家: ", audio["TIT2"])
-    print("歌曲名称: ", audio["TPE1"])
+    print("艺术家: ", audio["TPE1"])
+    print("歌曲名称: ", audio["TIT2"])
     print("专辑名称: ", audio["TALB"])
     # print("发布日期: ", audio["TDRC"])
 
