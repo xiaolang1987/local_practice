@@ -8,6 +8,8 @@ from bs4 import BeautifulSoup
 import time
 import random
 import json
+import urllib.parse
+import re
 
 
 def down_file(down_url, file_name):
@@ -19,9 +21,13 @@ def down_file(down_url, file_name):
         f.write(response.content)
 
 
-for page_num in range(62):
-    url_get_audio_id = "https://www.kugou.com/ts/album/157xm6a3/p%s.html" % (page_num + 1)
-    print("下载页%s" % (page_num + 62))
+# album_id = input("输入酷狗链接的albumId：")
+# save_path = input("输入本地保存路径：")
+
+for num in range(99):
+    page_num = num + 1
+    url_get_audio_id = "https://www.kugou.com/ts/album/11hmruec/p%s.html" % page_num
+    print("下载页%s" % page_num)
     headers_get_audio_id = {
         'authority': 'www.kugou.com',
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -43,9 +49,9 @@ for page_num in range(62):
 
     b = BeautifulSoup(response_get_audio_id.text, "html.parser")
     for i in b.select("body div li span a"):
-        album_id = i.get("href").split("/")[-1].split(".")[0]
-        album_num = i.contents[0].replace("虚空凝剑行 第", "").replace("集", "").zfill(4)
-        print(album_num, album_id)
+        album_id = i.get("href").split("/")[-1].split(".")[0]  # 音频id
+        album_name = i.contents[0]  # 原文件名
+        print(album_name, album_id)
 
         url_get_url = "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&callback=jQuery18007975900876100417_1687842587753&appid=1014&dfid=1twuST2NT6jC0r1mYJ0wSQMA&mid=0a3df919e29a5222c3a112fd0fcd91b3&platid=4&from=112&encode_album_audio_id=%s" % album_id
         print("video ID：%s" % url_get_url[-11:-1])
@@ -69,11 +75,26 @@ for page_num in range(62):
             'sec-fetch-dest': 'script',
             'sec-fetch-mode': 'no-cors',
             'sec-fetch-site': 'same-site',
-            'user-agent': '%s' % agent_list[random.randint(0, (len(agent_list)-1))]
+            'user-agent': '%s' % agent_list[random.randint(0, (len(agent_list) - 1))]
         }
 
         response_get_url = requests.request("GET", url_get_url, headers=headers, data={})
         print(headers['user-agent'])
-        down_url = json.loads(response_get_url.text.split("(")[1].replace(");", ""))["data"]["play_url"]
+        down_url = \
+            json.loads(response_get_url.text.replace(response_get_url.text.split("(")[0] + "(", "").replace(");", ""))[
+                "data"]["play_url"]
+
+        # 组装文件名
+        file_type = down_url.split(".")[-1]
+        edit_album_name = re.sub(r'^\d+', '', album_name)
+        album_num = re.search(r'^\d+', album_name)
+        if album_num:
+            file_name = album_num.group().zfill(3) + edit_album_name + file_type
+        else:
+            print("获取排序数字失败，暂时命名为000")
+            file_name = "000" + edit_album_name + "." + file_type
+        print("下载的文件名是：" + file_name)
+
         # 下载并保存
-        down_file(down_url, "/Users/zhaopeng/zp/bilibili/狂飙/%s.mp3" % album_num)
+        down_file(down_url, "%s/%s" % ("/Users/zhaopeng/Personal/bilibili/魔兽有声剧/酷狗", file_name))
+
