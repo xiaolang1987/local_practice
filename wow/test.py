@@ -70,7 +70,8 @@ def get_ah():
         ah[b["名称"]] = b["价格"]
 
     # 增加商人售卖的材料
-    businessman = [{"粗线": 10}, {"细线": 10}, {"丝线": 10}, {"符文线": 10}, {"盐": 10}, {"灰色染料": 10}, {"黑色染料": 10}]
+    businessman = [{"粗线": 9}, {"细线": 90}, {"丝线": 450}, {"符文线": 4500}, {"盐": 45}, {"灰色染料": 315},
+                   {"黑色染料": 900}]
     for i in businessman:
         ah.update(i)
 
@@ -138,11 +139,26 @@ def calculate_output_price(goods_level):
         final_price = 0
         if get_level_section(key, goods_level):
             for goods, item in value.items():
+                # print(goods, item, all_price)
                 final_num = item["min"] + (item["max"] - item["min"]) * 0.5
                 price = final_num * all_price[goods] * item["ratio"]
                 final_price += int(price)
 
             return final_price
+
+
+# 输出单位转换
+def gold_transform(x):
+    len_x = len(str(x))
+    h = "feifa"
+    if len_x <= 2:
+        h = "%s铜" % str(x)
+    elif len_x > 2 and len_x <= 4:
+        h = "%s银%s铜" % (str(x)[:2], str(x)[2:])
+    elif len_x > 4:
+        h = "%s金%s银%s铜" % (str(x)[:-4], str(x)[-4:-2], str(x)[-2:])
+
+    return h
 
 
 if __name__ == '__main__':
@@ -158,6 +174,6 @@ if __name__ == '__main__':
             input_price = all_calculate_cost[goods]
             profit = output_price - input_price  # 买出的材料 - 成本
             if profit > 0:
-                print(goods, profit)
-            # else:
-            #     print(goods, profit)
+                print(goods, "【赚】%s" % gold_transform(profit))
+            else:
+                print(goods, "【赔】%s" % gold_transform(profit))
