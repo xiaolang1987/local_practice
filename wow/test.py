@@ -70,8 +70,8 @@ def get_ah():
         ah[b["名称"]] = b["价格"]
 
     # 增加商人售卖的材料
-    businessman = [{"粗线": 9}, {"细线": 90}, {"丝线": 450}, {"符文线": 4500}, {"盐": 45}, {"灰色染料": 315},
-                   {"黑色染料": 900}]
+    businessman = [{"粗线": 9}, {"细线": 90}, {"丝线": 450}, {"粗丝线": 450}, {"符文线": 4500}, {"盐": 45}, {"灰色染料": 315},
+                   {"黑色染料": 900}, {"绿色染料": 900}, {"蓝色染料": 900}, {"红色染料": 900}]
     for i in businessman:
         ah.update(i)
 
@@ -84,7 +84,8 @@ def calculate_cost(materials, ah):
     for finish, i in materials.items():
         gold = 0
         for material, num in i.items():
-            gold += (ah[material] * num)
+            if num != 0:
+                gold += (ah[material] * num)
         cost[finish] = gold
     return cost
 
@@ -139,7 +140,7 @@ def calculate_output_price(goods_level):
         final_price = 0
         if get_level_section(key, goods_level):
             for goods, item in value.items():
-                # print(goods, item, all_price)
+                print(print(item["min"], (item["max"] - item["min"]) * 0.5,all_price[goods], item["ratio"]))
                 final_num = item["min"] + (item["max"] - item["min"]) * 0.5
                 price = final_num * all_price[goods] * item["ratio"]
                 final_price += int(price)
