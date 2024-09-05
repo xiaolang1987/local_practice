@@ -64,13 +64,14 @@ def get_goods_level():
 
 # 获取拍卖价格
 def get_ah():
-    df = pd.read_csv("ah_now.csv")
+    df = pd.read_csv(input("输入导出文件地址："))
     ah = {}
     for a, b in df.iterrows():
         ah[b["名称"]] = b["价格"]
 
     # 增加商人售卖的材料
-    businessman = [{"粗线": 9}, {"细线": 90}, {"丝线": 450}, {"粗丝线": 450}, {"符文线": 4500}, {"盐": 45}, {"灰色染料": 315},
+    businessman = [{"粗线": 9}, {"细线": 90}, {"丝线": 450}, {"粗丝线": 450}, {"符文线": 4500}, {"盐": 45},
+                   {"灰色染料": 315},
                    {"黑色染料": 900}, {"绿色染料": 900}, {"蓝色染料": 900}, {"红色染料": 900}]
     for i in businessman:
         ah.update(i)
@@ -140,8 +141,8 @@ def calculate_output_price(goods_level):
         final_price = 0
         if get_level_section(key, goods_level):
             for goods, item in value.items():
-                print(print(item["min"], (item["max"] - item["min"]) * 0.5,all_price[goods], item["ratio"]))
                 final_num = item["min"] + (item["max"] - item["min"]) * 0.5
+                # print(final_num, item["min"], (item["max"] - item["min"]) * 0.5, all_price[goods], item["ratio"])
                 price = final_num * all_price[goods] * item["ratio"]
                 final_price += int(price)
 
@@ -171,6 +172,7 @@ if __name__ == '__main__':
         goods_level = get_goods_level()[goods]
         # 等级为0，暂时表示中间产物，不统计收益
         if goods_level != 0:
+            # print(goods)
             output_price = calculate_output_price(goods_level)
             input_price = all_calculate_cost[goods]
             profit = output_price - input_price  # 买出的材料 - 成本
