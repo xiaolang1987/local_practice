@@ -64,7 +64,7 @@ def get_goods_level():
 
 # 获取拍卖价格
 def get_ah():
-    df = pd.read_csv(input("输入导出文件地址："))
+    df = pd.read_csv("ah_now.csv")
     ah = {}
     for a, b in df.iterrows():
         ah[b["名称"]] = b["价格"]
@@ -95,6 +95,7 @@ def calculate_cost(materials, ah):
 def get_output():
     df = pd.read_csv("output.csv")
     output = {}
+    goods_list = []
     for a, b in df.iterrows():
         # 整理概率
         ratio = b["分解概率"].split("&&")
@@ -109,13 +110,14 @@ def get_output():
         output[levels] = {}
         for i in goods:
             for key, value in json.loads(i).items():
+                goods_list.append(key)
                 min_num = int(value.split("-")[0])
                 max_num = int(value.split("-")[1])
                 output[levels][key] = {}
                 output[levels][key]["min"] = min_num
                 output[levels][key]["max"] = max_num
                 output[levels][key]["ratio"] = temp_ratio[key]
-
+    print("\"^\"".join(list(set(goods_list))))
     return output
 
 
