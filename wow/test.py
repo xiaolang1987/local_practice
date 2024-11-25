@@ -70,8 +70,8 @@ def get_ah():
         ah[b["名称"]] = b["价格"]
 
     # 增加商人售卖的材料
-    businessman = [{"粗线": 9}, {"细线": 90}, {"丝线": 450}, {"粗丝线": 450}, {"符文线": 4500}, {"盐": 45},
-                   {"灰色染料": 315},
+    businessman = [{"粗线": 9}, {"细线": 90}, {"丝线": 450}, {"粗丝线": 450}, {"符文线": 4500}, {"恒金线": 30000},
+                   {"盐": 45}, {"灰色染料": 315},
                    {"黑色染料": 900}, {"绿色染料": 900}, {"蓝色染料": 900}, {"红色染料": 900}]
     for i in businessman:
         ah.update(i)
@@ -117,7 +117,7 @@ def get_output():
                 output[levels][key]["min"] = min_num
                 output[levels][key]["max"] = max_num
                 output[levels][key]["ratio"] = temp_ratio[key]
-    print("\"^\"".join(list(set(goods_list))))
+    # print("\"^\"".join(list(set(goods_list))))
     return output
 
 
