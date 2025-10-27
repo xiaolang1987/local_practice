@@ -7,7 +7,7 @@ import os
 import mutagen
 from mutagen.id3 import ID3, TIT2, TPE1, TALB, APIC, TCON, TCOM, TPE2, COMM
 
-dir = "/Users/zhaopeng/Desktop/士兵突击/"
+dir = "/Users/zhaopeng/Personal/bilibili/jinbo/cut"
 
 
 def scan_dir(directory):
@@ -22,18 +22,18 @@ def scan_dir(directory):
 print(scan_dir(dir))
 for i in scan_dir(dir):
     file_name = i
-    audio_file = dir + file_name
+    audio_file = os.path.join(dir, file_name)
     audio = ID3(audio_file)
     # 通过文件名拆解歌名和歌手
     singer = audio_file.split("/")[-1].split("-")[0].replace(" ", "")
     name = audio_file.split("/")[-1].split("-")[1].split(".")[0].replace(" ", "")
 
     # 默认直接添加，暂无判断逻辑
-    audio.add(TPE1(encoding=3, text="兰晓龙"))  # 添加艺术家
+    audio.add(TPE1(encoding=3, text="金波"))  # 添加艺术家
     audio.add(TIT2(encoding=3, text=file_name.replace(".mp3", "")))  # 添加歌曲名称
-    audio.add(TALB(encoding=3, text="士兵突击"))  # 添加专辑名称
+    audio.add(TALB(encoding=3, text="金波四季美文·春天卷"))  # 添加专辑名称
     # audio.delall("TCOM")
-    audio.add(TCOM(encoding=3, text="士兵突击"))
+    audio.add(TCOM(encoding=3, text="长江少年儿童出版社"))  # 作曲者
     audio.delall("TPE2")
     audio.delall("TCON")
     audio.delall("COMM")
@@ -41,13 +41,13 @@ for i in scan_dir(dir):
                 encoding=0,
                 mime='image/jpeg',  # image/jpeg or image/png
                 type=3,  # 3 is for the cover(front) image
-                data=open("士兵突击.jpg", 'rb').read()
+                data=open("春.jpg", 'rb').read()
             ))
 
     audio.save()
     print("歌曲名称: ", audio["TIT2"])
 
-print(audio.values())
+# print(audio.values())
 print("艺术家: ", audio["TPE1"])
 print("歌曲名称: ", audio["TIT2"])
 print("专辑名称: ", audio["TALB"])
