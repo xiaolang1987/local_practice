@@ -13,3 +13,6 @@
 
 # 小工具本地生成的缓存文件
 widget/temp.jpg
+
+# wow不上传每日的金价
+wow/his_daily/his_daily*
