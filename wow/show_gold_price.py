@@ -59,6 +59,9 @@ with open("gold_price.json", "w", encoding="utf-8") as f:
         json.dump(l, f, ensure_ascii=False)
         f.write("\n")
 
+# 设置中文字体
+plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'STHeiti']
+plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
 
 # 准备展示趋势
 sorted_data = sorted(gold_prices, key=lambda x: x['日期'])
@@ -66,9 +69,9 @@ plot_data = [f"{str(d['日期'])[:4]}/{str(d['日期'])[4:6]}/{str(d['日期'])[
 p90s = [d['P90'] for d in sorted_data]
 
 plt.plot(plot_data, p90s, marker="o", label="P90")
-plt.title("P90 Trend")
-plt.xlabel("Date")
-plt.ylabel("P90")
+plt.title("金价趋势图")
+plt.xlabel("日期")
+plt.ylabel("1金币")
 plt.xticks(rotation=45)
 
 
